@@ -41,9 +41,12 @@ public class JavaApplication72 {
                 default:
                     System.out.println("Acción no válida.");
             }
+
+            // Actualizar el nivel después del movimiento de Mario
+            nivel1.actualizar();
         }
 
         System.out.println("Game Over");
         sc.close();
     }
-    }
+}

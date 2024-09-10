@@ -9,16 +9,31 @@ package javaapplication72;
  * @author alessandro
  */
 public class Enemigo {
-    protected int posX;
+   protected int posX;
     protected int posY;
+    private Mario mario;
 
-    public Enemigo(int startX, int startY) {
+    public Enemigo(int startX, int startY, Mario mario) {
         this.posX = startX;
         this.posY = startY;
+        this.mario = mario;
     }
 
     public void mover() {
-        // Lógica para mover al enemigo
+        int marioX = mario.getPosX();
+        int marioY = mario.getPosY();
+
+        if (posX < marioX) {
+            posX++;
+        } else if (posX > marioX) {
+            posX--;
+        }
+
+        if (posY < marioY) {
+            posY++;
+        } else if (posY > marioY) {
+            posY--;
+        }
     }
 
     public int getPosX() {

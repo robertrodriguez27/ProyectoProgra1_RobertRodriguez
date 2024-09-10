@@ -5,25 +5,32 @@
 package javaapplication72;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author alessandro
  */
 public class Nivel {
-    private int[][] mapa;  // Representación del nivel, 0 = vacío, 1 = moneda
+     private int[][] mapa;  // Representación del nivel, 0 = vacío, 1 = moneda
     private int ancho;
     private int alto;
     private Mario mario;
+    private List<Enemigo> enemigos; // Lista para almacenar enemigos
 
-    public Nivel(Mario ancho) {
-        this.ancho = ancho;
-        this.alto = alto;
+    public Nivel(Mario mario) {
+        this.ancho = 10; // Ancho del nivel
+        this.alto = 5;  // Alto del nivel
         this.mapa = new int[alto][ancho];
-        this.mario = new Mario(0, alto - 1); // Mario comienza en la esquina inferior izquierda
+        this.mario = mario;
+        this.enemigos = new ArrayList<>(); // Inicializar la lista de enemigos
 
         // Inicializar el mapa con algunas monedas
         generarMonedas();
+
+        // Agregar algunos enemigos para el ejemplo
+        enemigos.add(new Enemigo(2, 2, mario));
+        enemigos.add(new Enemigo(5, 3, mario));
     }
 
     // Método para generar monedas en el nivel de manera aleatoria
@@ -35,20 +42,12 @@ public class Nivel {
         }
     }
 
-    // Método para mover a Mario en el nivel
-    public void moverMarioIzquierda() {
-        mario.moverIzquierda();
+    // Método para actualizar el nivel y recolectar monedas
+    public void actualizar() {
         recolectarMoneda();
-    }
-
-    public void moverMarioDerecha() {
-        mario.moverDerecha();
-        recolectarMoneda();
-    }
-
-    public void saltarMario() {
-        mario.saltar();
-        recolectarMoneda();
+        for (Enemigo enemigo : enemigos) {
+            enemigo.mover(); // Mover cada enemigo
+        }
     }
 
     // Método para recolectar monedas
@@ -65,9 +64,19 @@ public class Nivel {
     }
 
     // Método para dibujar el nivel en la consola
-    public void dibujarNivel() {
+    public void dibujar() {
         for (int y = 0; y < alto; y++) {
             for (int x = 0; x < ancho; x++) {
+                boolean esEnemigo = false;
+                for (Enemigo enemigo : enemigos) {
+                    if (x == enemigo.getPosX() && y == enemigo.getPosY()) {
+                        System.out.print("E "); // Representar al enemigo con 'E'
+                        esEnemigo = true;
+                        break;
+                    }
+                }
+                if (esEnemigo) continue;
+                
                 if (x == mario.getPosX() && y == mario.getPosY()) {
                     System.out.print("M "); // Representar a Mario con 'M'
                 } else if (mapa[y][x] == 1) {
@@ -79,23 +88,4 @@ public class Nivel {
             System.out.println();
         }
     }
-
-    // Método principal para ejecutar el juego
-    public static void main(String[] args) {
-        Nivel nivel = new Nivel(10); // Crear un nivel de 10x5
-
-        // Simular algunos movimientos de Mario
-        nivel.dibujarNivel();
-        nivel.moverMarioDerecha();
-        nivel.dibujarNivel();
-        nivel.moverMarioDerecha();
-        nivel.dibujarNivel();
-        nivel.saltarMario();
-        nivel.dibujarNivel();
-        nivel.moverMarioIzquierda();
-        nivel.dibujarNivel();
-    }
 }
-
-   
-
